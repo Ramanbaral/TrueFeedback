@@ -1,4 +1,5 @@
-export { auth as middleware } from "@/auth"
+import { auth } from "@/auth";
+import { getToken } from "next-auth/jwt";
 // import { getToken } from "next-auth/jwt";
 // import { NextRequest, NextResponse } from "next/server";
 
@@ -22,3 +23,14 @@ export { auth as middleware } from "@/auth"
 // export const config = {
 //   matcher: ["/sign-in", "/sign-up", "/", "/dashboard/:path*", "/verify/:path*"],
 // };
+
+export default auth(async (req) => {
+  const token = await getToken({req: req})
+  console.log(token);
+  // req.auth
+});
+
+// Optionally, don't invoke Middleware on some paths
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
