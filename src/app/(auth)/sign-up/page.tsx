@@ -21,7 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ShoppingBag, Eye, EyeOff, Check, X } from "lucide-react";
+import { MessageSquare, Eye, EyeOff, Check, X } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 export default function SignUp() {
@@ -99,8 +99,10 @@ export default function SignUp() {
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <ShoppingBag className="h-8 w-8 text-primary mr-2" />
+          <div className="flex items-center justify-center mb-4 gap-2">
+            <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+              <MessageSquare className="w-5 h-5 text-white" />
+            </div>
             <span className="text-2xl font-bold text-gray-900">PureFeedback</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
@@ -306,7 +308,7 @@ export default function SignUp() {
           <CardFooter>
             <p className="text-center text-sm text-gray-600 w-full">
               Already have an account?{" "}
-              <Link href="/sign-in" className="text-primary hover:underline font-medium">
+              <Link href="/sign-in" className="hover:underline font-medium">
                 Sign in
               </Link>
             </p>
