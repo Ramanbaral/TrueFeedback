@@ -24,9 +24,9 @@ import { getToken } from "next-auth/jwt";
 //   matcher: ["/sign-in", "/sign-up", "/", "/dashboard/:path*", "/verify/:path*"],
 // };
 
-export default auth(async (req) => {
-  const token = await getToken({req: req})
-  console.log(token);
+export default auth(async req => {
+  const token = await getToken({ req: req });
+  // console.log(token);
   // req.auth
 });
 

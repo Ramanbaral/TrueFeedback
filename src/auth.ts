@@ -40,8 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           let user: User | null = null;
 
-          const { username, password } =
-            await signInSchema.parseAsync(credentials);
+          const { username, password } = await signInSchema.parseAsync(credentials);
 
           user = await getUserByUsernameOrEmail(username);
 
@@ -52,9 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           } else {
             const isPwdCorrect = await bcrypt.compare(password, user.password);
             if (!isPwdCorrect) {
-              throw new Error(
-                "Invalid credentials username or password not matched."
-              );
+              throw new Error("Invalid credentials username or password not matched.");
             }
           }
 

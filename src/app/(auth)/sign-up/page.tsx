@@ -21,19 +21,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ShoppingBag, Eye, EyeOff } from "lucide-react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
+import { ShoppingBag, Eye, EyeOff, Check, X } from "lucide-react";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 export default function SignUp() {
   const [username, setUsername] = useDebounceValue("", 350);
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [usernameAvailable, setUsernameAvailable] = useState(false);
+  const [usernameTaken, setUsernameTaken] = useState(false);
   const [isSubmiting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -55,17 +50,25 @@ export default function SignUp() {
     //check if username available //api/check-username-uniqueness
     if (username) {
       setIsCheckingUsername(true);
+      setUsernameAvailable(false);
+      setUsernameTaken(false);
       axios
         .get("/api/check-username-uniqueness", {
           params: {
             username: username,
           },
         })
-        .then((response) => {
-          if (response.data.success) setUsernameAvailable(true);
+        .then(response => {
+          if (response.data.success) {
+            setUsernameAvailable(true);
+            setUsernameTaken(false);
+          }
         })
-        .catch((err) => {
-          console.log("error checking username", err);
+        .catch(err => {
+          if (err.status === 400) {
+            setUsernameTaken(true);
+            setUsernameAvailable(false);
+          }
         })
         .finally(() => {
           setIsCheckingUsername(false);
@@ -73,16 +76,20 @@ export default function SignUp() {
     }
   }, [username]);
 
-  const onSubmit: SubmitHandler<formData> = async (data) => {
+  const onSubmit: SubmitHandler<formData> = async data => {
     try {
       setIsSubmitting(true);
       const response = await axios.post("/api/sign-up", data);
-      if (response.data.success) toast.success("Account Created.");
-      else toast.error("Problem creating new account. Please Try Again Later.");
+      if (response.data.success) {
+        toast.success("Account Created.");
+        router.replace(`/verify-code/${username}`);
+      } else {
+        toast.error("Account Already Exists.");
+      }
       setIsSubmitting(false);
-      router.replace(`/verify/${username}`);
     } catch (error) {
       console.log("error submitting signup form ", error);
+      toast.error("Problem creating new account. Please Try Again Later.");
       setIsSubmitting(false);
     }
   };
@@ -94,9 +101,7 @@ export default function SignUp() {
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <ShoppingBag className="h-8 w-8 text-primary mr-2" />
-            <span className="text-2xl font-bold text-gray-900">
-              PureFeedback
-            </span>
+            <span className="text-2xl font-bold text-gray-900">PureFeedback</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
         </div>
@@ -110,10 +115,7 @@ export default function SignUp() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <FormField
                     control={form.control}
@@ -125,7 +127,7 @@ export default function SignUp() {
                           <Input
                             placeholder="rambo"
                             {...field}
-                            onChange={(e) => {
+                            onChange={e => {
                               field.onChange(e);
                               setUsername(e.target.value);
                             }}
@@ -134,6 +136,28 @@ export default function SignUp() {
                       </FormItem>
                     )}
                   />
+                  {isCheckingUsername && (
+                    <div className="flex items-center gap-1">
+                      <div className="animate-spin rounded-full h-3 w-3 border-2 border-t-transparent black-blue-500"></div>
+                      <p className="text-xs text-gray-400 self-end">
+                        Checking username availability
+                      </p>
+                    </div>
+                  )}
+
+                  {usernameAvailable && (
+                    <div className="flex items-center gap-1 text-green-400">
+                      <Check size={18} />
+                      <p className="text-xs">username available</p>
+                    </div>
+                  )}
+
+                  {usernameTaken && (
+                    <div className="flex items-center gap-1 text-red-400">
+                      <X size={16} />
+                      <p className="text-xs">username already taken</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -201,9 +225,7 @@ export default function SignUp() {
                       variant="ghost"
                       size="sm"
                       className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="h-4 w-4 text-gray-400" />
@@ -215,7 +237,11 @@ export default function SignUp() {
                 </div>
 
                 <Button type="submit" className="w-full">
-                  {isSubmiting ? "loading spinner" : "Create Account"}
+                  {isSubmiting ? (
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-t-transparent black-blue-500"></div>
+                  ) : (
+                    "Create Account"
+                  )}
                 </Button>
               </form>
             </Form>
@@ -226,9 +252,7 @@ export default function SignUp() {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
+                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
 
@@ -282,10 +306,7 @@ export default function SignUp() {
           <CardFooter>
             <p className="text-center text-sm text-gray-600 w-full">
               Already have an account?{" "}
-              <Link
-                href="/sign-in"
-                className="text-primary hover:underline font-medium"
-              >
+              <Link href="/sign-in" className="text-primary hover:underline font-medium">
                 Sign in
               </Link>
             </p>
@@ -295,8 +316,8 @@ export default function SignUp() {
         {/* Additional Info */}
         <div className="text-center mt-6">
           <p className="text-xs text-gray-500">
-            By creating an account, you agree to our{" "}
-            <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            By creating an account, you agree to our <a href="#">Terms of Service</a> and{" "}
+            <a href="#">Privacy Policy</a>.
           </p>
         </div>
       </div>

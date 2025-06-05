@@ -4,17 +4,17 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signUpSchema } from "@/schemas/signUpSchema";
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import { NextRequest, NextResponse } from "next/server";
 
 type SignUpData = z.infer<typeof signUpSchema>;
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const userData: SignUpData = await request.json();
 
     const parseResult = signUpSchema.safeParse(userData);
     if (!parseResult.success) {
       //data validation failed
-      // console.log(parseResult.error);
       return Response.json(
         {
           success: false,
@@ -52,9 +52,9 @@ export async function POST(request: Request) {
         },
       });
 
-      sendVerificationEmail(userData.email, userData.username, verifyCode);
+      await sendVerificationEmail(userData.email, userData.username, verifyCode);
 
-      return Response.json(
+      return NextResponse.json(
         {
           success: true,
           message: "New User Account Created.",
@@ -68,12 +68,12 @@ export async function POST(request: Request) {
       (userByEmail !== null && userByEmail.isVerified === true) ||
       (userByUsername !== null && userByUsername.isVerified === true)
     ) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Account already exists.",
         },
-        { status: 400 }
+        { status: 200 }
       );
     }
 
@@ -94,9 +94,9 @@ export async function POST(request: Request) {
         },
       });
 
-      // sendVerificationEmail(userData.email, userByEmail.username, verifyCode);
+      sendVerificationEmail(userData.email, userByEmail.username, verifyCode);
 
-      return Response.json(
+      return NextResponse.json(
         {
           success: true,
           message: "User Created.",
@@ -123,9 +123,9 @@ export async function POST(request: Request) {
         },
       });
 
-      // sendVerificationEmail(userData.email, userData.username, verifyCode);
+      sendVerificationEmail(userData.email, userData.username, verifyCode);
 
-      return Response.json(
+      return NextResponse.json(
         {
           success: true,
           message: "User Created.",
@@ -133,7 +133,7 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     } else {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Problem creating user.",
@@ -143,7 +143,7 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.log("Error in user registration.", error);
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message: "Error in user registration.",

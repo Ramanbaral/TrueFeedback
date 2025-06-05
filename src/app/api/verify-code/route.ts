@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         success: false,
         message: "Invalid verify code.",
       },
-      { status: 400 }
+      { status: 200 }
     );
   } catch (err) {
     console.log(err);
