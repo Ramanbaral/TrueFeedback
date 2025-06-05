@@ -103,7 +103,7 @@ export default function SignUp() {
             <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
               <MessageSquare className="w-5 h-5 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">PureFeedback</span>
+            <span className="text-2xl font-bold text-gray-900">TrueFeedback</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
         </div>
