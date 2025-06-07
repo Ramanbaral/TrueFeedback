@@ -16,13 +16,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { content } = data.content;
-    const userid = request.nextUrl.searchParams.get("userid");
+    const { content, username } = data;
 
     //first check if user isAcceptingMessage
     const user = await prisma.user.findUniqueOrThrow({
       where: {
-        id: userid as string,
+        username: username,
       },
     });
 
@@ -30,16 +29,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: "user is not accepting any message currently.",
+          message: "User is not accepting Feedbacks currently.",
         },
-        { status: 400 }
+        { status: 200 }
       );
     }
 
     await prisma.message.create({
       data: {
         content: content,
-        userId: userid as string,
+        userId: user.id,
       },
     });
 

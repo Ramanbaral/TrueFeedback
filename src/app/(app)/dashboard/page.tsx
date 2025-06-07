@@ -1,37 +1,22 @@
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Copy, RefreshCwIcon } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { FeedbackCard } from "./_components/FeedbackCard";
+import { RefreshCwIcon } from "lucide-react";
 import { Pagination } from "./_components/Pagination";
+import { PublicLink } from "./_components/PublicLink";
 
 async function Dashboard() {
   const session = await auth();
+  const username = session?.user.username;
+  if (!session) redirect("/sign-in");
 
   return (
     <div>
-      {/* <p className='text-center text-3xl'>Welcome, {session?.user.username}</p> */}
-      <p className="text-center text-primary text-3xl font-semibold my-6">Welcome, @ramanbaral</p>
+      <p className="text-center text-primary text-3xl font-semibold my-6">Welcome, @{username}</p>
 
-      <div className="m-10 my-5">
-        <p className="text-lg">Share your link and start receiving anonymous feedbacks</p>
-        <div className="flex items-center gap-4">
-          {/* link box */}
-          <div className="my-4 py-2 px-4 border-2 border-gray-300 border-dashed rounded-md bg-accent">
-            https://www.trueFeedback.com/u/ramanbaral
-          </div>
-          {/* copy button  */}
-          <Button variant="default">
-            <Copy /> Copy
-          </Button>
-        </div>
-        {/* Message status toggle button  */}
-        <div className="flex items-center gap-4">
-          <Switch />
-          <span className="text-lg">Accept Feedbacks: ON</span>
-        </div>
-      </div>
+      <PublicLink username={username as string} />
 
       <Separator />
 

@@ -12,11 +12,12 @@ import { toast } from "sonner";
 import { signInSchema } from "@/schemas/signInSchema";
 import Link from "next/link";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { signIn } from "@/auth";
+import SignIn from "./actions/signIn";
 import { useRouter } from "next/navigation";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const router = useRouter();
+
   type formData = z.infer<typeof signInSchema>;
   const form = useForm<formData>({
     resolver: zodResolver(signInSchema as any),
@@ -26,24 +27,17 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     },
   });
 
-  const onSubmit = async (values: formData) => {
+  const onSubmit = async (data: formData) => {
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        username: values.username,
-        password: values.password,
-      });
+      const result = await SignIn(data.username, data.password);
       console.log(result);
-      if (result?.error) {
-        toast.error("Incorrect username or password.");
-      }
 
-      if (result?.url) {
+      if (result) {
         router.replace("/dashboard");
       }
-      console.log(values);
     } catch (error) {
-      console.log(error);
+      toast.error("Invalid Credentials");
+      console.log("Something Went Wrong during Signin", error);
     }
   };
 

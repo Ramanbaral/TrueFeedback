@@ -2,8 +2,9 @@
 
 import { User } from "next-auth";
 import Link from "next/link";
+import type { Session } from "next-auth";
 
-export function Navbar({ session: session }) {
+export function Navbar(session: Session) {
   const user: User = session?.user;
 
   return (

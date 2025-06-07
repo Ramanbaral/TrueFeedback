@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function OTPVerification() {
   const [otp, setOtp] = useState("");
@@ -38,10 +39,11 @@ export default function OTPVerification() {
 
       if (res.data.success) {
         setIsVerified(true);
+        toast.success("Account Verified.");
       } else {
         setError("Invalid verification code. Please try again.");
       }
-    } catch (err) {
+    } catch {
       setError("Verification failed. Please try again.");
     } finally {
       setIsLoading(false);
@@ -57,7 +59,7 @@ export default function OTPVerification() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       // In a real app, you would call your resend OTP API here
       console.log("Resending OTP...");
-    } catch (err) {
+    } catch {
       setError("Failed to resend code. Please try again.");
     } finally {
       setIsResending(false);

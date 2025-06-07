@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const session = await auth();
+  console.log(session);
   const user = session?.user;
   if (!session || !session.user) {
     return NextResponse.json(
@@ -15,7 +16,9 @@ export async function POST(request: NextRequest) {
     );
   }
   const userId = user?._id;
-  const { acceptMessages } = await request.json();
+  //problemo because no userId in session
+  console.log(userId);
+  const { acceptFeedbacks } = await request.json();
 
   try {
     await prisma.user.update({
@@ -23,7 +26,7 @@ export async function POST(request: NextRequest) {
         id: userId,
       },
       data: {
-        isAcceptingMessage: acceptMessages,
+        isAcceptingMessage: acceptFeedbacks,
       },
     });
 
@@ -63,7 +66,7 @@ export async function GET(request: NextRequest) {
       {
         success: true,
         message: "succesfully retrived status",
-        isAcceptingMessage: user.isAcceptingMessage,
+        isAcceptingFeedback: user.isAcceptingMessage,
       },
       { status: 200 }
     );

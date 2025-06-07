@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!user) {
             throw new Error("Invalid credentials.");
           } else if (user.isVerified == false) {
-            throw new Error("Please verify your own.");
+            throw new Error("Please verify your account.");
           } else {
             const isPwdCorrect = await bcrypt.compare(password, user.password);
             if (!isPwdCorrect) {
@@ -69,7 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token._id = user._id?.toString();
+        token._id = user.id;
         token.isVerified = user.isVerified;
         token.isAcceptingMessages = user.isAcceptingMessages;
         token.username = user.username;

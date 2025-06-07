@@ -3,8 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Shield, Users, Zap, Star, ArrowRight, Eye, Lock } from "lucide-react";
 import Link from "next/link";
+import { auth, signOut } from "@/auth";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const session = await auth();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50">
       {/* Navigation */}
@@ -40,15 +43,29 @@ export default function LandingPage() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                className="text-teal-600 hover:text-teal-700 hover:bg-teal-50"
-              >
-                <Link href="/sign-in">Sign In</Link>
-              </Button>
-              <Button className="bg-teal-600 hover:bg-teal-700 text-white">
-                <Link href="/sign-up">Sign Up</Link>
-              </Button>
+              {session != null ? (
+                <Button
+                  className="bg-teal-600 hover:bg-teal-700 text-white"
+                  onClick={async () => {
+                    "use server";
+                    await signOut();
+                  }}
+                >
+                  <Link href="/sign-up">Sign Out</Link>
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    className="text-teal-600 hover:text-teal-700 hover:bg-teal-50"
+                  >
+                    <Link href="/sign-in">Sign In</Link>
+                  </Button>
+                  <Button className="bg-teal-600 hover:bg-teal-700 text-white">
+                    <Link href="/sign-up">Sign Up</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -79,9 +96,7 @@ export default function LandingPage() {
               className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               <MessageSquare className="w-6 h-6 mr-3" />
-              <Link href="/dashboard">
-              Go to Dashboard
-              </Link>
+              <Link href="/dashboard">Go to Dashboard</Link>
               <ArrowRight className="w-5 h-5 ml-3" />
             </Button>
           </div>
@@ -211,9 +226,7 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-white">1</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Create Your Account</h3>
-              <p className="text-gray-600">
-                Sign up for free and set up your account in seconds.
-              </p>
+              <p className="text-gray-600">Sign up for free and set up your account in seconds.</p>
             </div>
 
             <div className="text-center">
@@ -221,9 +234,7 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-white">2</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Share your link</h3>
-              <p className="text-gray-600">
-                Share your link in groups or socials.
-              </p>
+              <p className="text-gray-600">Share your link in groups or socials.</p>
             </div>
 
             <div className="text-center">
