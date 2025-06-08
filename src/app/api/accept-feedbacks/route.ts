@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const session = await auth();
-  console.log(session);
   const user = session?.user;
   if (!session || !session.user) {
     return NextResponse.json(
@@ -16,8 +15,7 @@ export async function POST(request: NextRequest) {
     );
   }
   const userId = user?._id;
-  //problemo because no userId in session
-  console.log(userId);
+
   const { acceptFeedbacks } = await request.json();
 
   try {
