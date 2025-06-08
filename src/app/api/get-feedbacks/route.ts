@@ -1,18 +1,25 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-export const POST = async function (req: NextRequest) {
-  //user is undefined not able to get session (fetches all the requests of all the users)
+export const GET = async function () {
   const session = await auth();
-  console.log(session);
-  const user = session?.user;
-  // console.log(user)
+  if (!session) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "user not authenticated",
+      },
+      { status: 401 }
+    );
+  }
+
+  const userId = session?.user._id;
 
   try {
     const messages = await prisma.message.findMany({
       where: {
-        userId: user?._id,
+        userId: userId,
       },
     });
 

@@ -14,11 +14,11 @@ type Props = {
 };
 
 async function Dashboard({ searchParams }: Props) {
-  try {
-    const session = await auth();
-    const username = session?.user.username;
-    if (!session) redirect("/sign-in");
+  const session = await auth();
+  const username = session?.user.username;
+  if (!session) redirect("/sign-in");
 
+  try {
     const page = searchParams.page || 1;
 
     return (

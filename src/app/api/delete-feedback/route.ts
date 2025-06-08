@@ -4,6 +4,15 @@ import { prisma } from "@/lib/prisma";
 
 export async function DELETE(request: NextRequest) {
   const session = await auth();
+  if (!session) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "user not authenticated",
+      },
+      { status: 401 }
+    );
+  }
   const userId = session?.user._id;
   console.log(userId);
 
