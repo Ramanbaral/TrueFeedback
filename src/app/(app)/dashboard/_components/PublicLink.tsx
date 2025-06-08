@@ -1,11 +1,11 @@
 "use client";
+import axios from "axios";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { Copy, CopyCheck } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import axios from "axios";
-import { toast } from "sonner";
 
 type FormValues = {
   feedbacks: boolean;

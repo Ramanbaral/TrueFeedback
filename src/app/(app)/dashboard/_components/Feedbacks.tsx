@@ -11,7 +11,7 @@ export async function Feedbacks({ page }: { page: number }) {
     <>
       <div className="m-10 my-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {feedbacks.map(feedback => (
-          <FeedbackCard key={feedback.id} content={feedback.content} date={feedback.createdAt} />
+          <FeedbackCard key={feedback.id} id={feedback.id} content={feedback.content} date={feedback.createdAt} />
         ))}
       </div>
       {totalFeedbacks > 9 && (
