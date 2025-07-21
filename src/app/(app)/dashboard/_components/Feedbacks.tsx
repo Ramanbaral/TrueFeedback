@@ -5,12 +5,13 @@ import { getFeedbacks, countFeedbacks } from "../feedbacks";
 export async function Feedbacks({ page }: { page: number }) {
   const feedbacks = await getFeedbacks(page);
 
-  const totalFeedbacks = await countFeedbacks();
+  let totalFeedbacks = await countFeedbacks();
+  if (totalFeedbacks === undefined) totalFeedbacks = 0;
 
   return (
     <>
       <div className="m-10 my-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {feedbacks.map(feedback => (
+        {feedbacks?.map(feedback => (
           <FeedbackCard
             key={feedback.id}
             id={feedback.id}
@@ -19,6 +20,7 @@ export async function Feedbacks({ page }: { page: number }) {
           />
         ))}
       </div>
+
       {totalFeedbacks > 9 && (
         <Pagination curPage={page} totalPage={Math.ceil(totalFeedbacks / 9)} />
       )}

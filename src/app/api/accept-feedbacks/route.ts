@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: "user not authentication",
+        message: "user not authenticated",
       },
       { status: 401 }
     );

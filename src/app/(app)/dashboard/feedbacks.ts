@@ -5,22 +5,30 @@ const session = await auth();
 
 export async function getFeedbacks(page: number) {
   const skipItem = (page - 1) * 9;
-  return await prisma.message.findMany({
-    skip: skipItem,
-    take: 9,
-    where: {
-      userId: session?.user?._id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  try {
+    return await prisma.message.findMany({
+      skip: skipItem,
+      take: 9,
+      where: {
+        userId: session?.user?._id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch {
+    console.log("Problem fetching feedbacks.");
+  }
 }
 
 export async function countFeedbacks() {
-  return await prisma.message.count({
-    where: {
-      userId: session?.user?._id,
-    },
-  });
+  try {
+    return await prisma.message.count({
+      where: {
+        userId: session?.user?._id,
+      },
+    });
+  } catch {
+    console.log("Problem fetching feedbacks.");
+  }
 }

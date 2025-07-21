@@ -9,3 +9,10 @@ export default async function SignIn(username: string, password: string) {
   });
   return result;
 }
+
+export async function GoogleSignIn() {
+  "use server";
+  await signIn("google", {
+    redirectTo: "/dashboard",
+  });
+}
