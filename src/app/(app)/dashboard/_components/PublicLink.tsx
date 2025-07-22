@@ -69,7 +69,7 @@ export function PublicLink({ username }: { username: string }) {
       <div className="flex items-center gap-4">
         {/* link box */}
         <div className="my-4 py-2 px-4 border-2 border-gray-300 border-dashed rounded-md bg-accent">
-          {`http://localhost:3000/u/${username}`}
+          {`https://truefeedback.ramanbaral.live/u/${username}`}
         </div>
         {/* copy button  */}
         <Button variant="default" onClick={copyLink}>
