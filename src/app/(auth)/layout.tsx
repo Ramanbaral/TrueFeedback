@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "AUTH",
+  title: "AUTH | TrueFeedback",
   description: "",
 };
 

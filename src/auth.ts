@@ -1,10 +1,9 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import Google from "next-auth/providers/google";
+// import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { ZodError } from "zod/v4";
 import { prisma } from "@/lib/prisma";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { User } from "./generated/prisma";
 import { signInSchema } from "./schemas/signInSchema";
 
@@ -30,7 +29,6 @@ export async function getUserByUsernameOrEmail(usernameOrEmail: string) {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
       id: "credentials",
@@ -68,7 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
     }),
-    Google,
+    // Google,
   ],
   callbacks: {
     async jwt({ token, user }) {

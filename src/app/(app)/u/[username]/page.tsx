@@ -17,7 +17,12 @@ export default function Message() {
   const [isSending, setIsSending] = useState(false);
   const { username } = useParams<{ username: string }>();
 
-  const { register, handleSubmit, setValue, setError } = useForm<IFormInput>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async data => {
     try {
@@ -60,6 +65,9 @@ export default function Message() {
               placeholder="Type your feedback here."
               {...register("content", { required: true, minLength: 10 })}
             />
+            {errors.content && (
+              <p className="text-destructive m-2">Feedback should be more than 10 characters.</p>
+            )}
           </div>
           <Button type="submit" variant="default" className="cursor-pointer mt-5">
             {isSending ? (
@@ -73,7 +81,7 @@ export default function Message() {
       <Separator className="my-5" />
       <div className="my-10 grid place-content-center">
         <Link href="/sign-up">
-          <Button className="cursor-pointer">Create Your Accound</Button>
+          <Button className="cursor-pointer">Create Your Account</Button>
         </Link>
       </div>
     </div>

@@ -17,7 +17,7 @@ export function PublicLink({ username }: { username: string }) {
 
   async function copyLink() {
     setIsLinkCopied(true);
-    await navigator.clipboard.writeText(`https://www.trueFeedback.com/u/${username}`);
+    await navigator.clipboard.writeText(`https://truefeedback.ramanbaral.live/u/${username}`);
   }
 
   const { control, handleSubmit, setValue } = useForm<FormValues>({
@@ -26,23 +26,23 @@ export function PublicLink({ username }: { username: string }) {
     },
   });
 
-  useEffect(() => {
-    async function getAcceptFeedbackStatus() {
-      try {
-        const { data } = await axios.get("api/accept-feedbacks", {
-          params: {
-            username: username,
-          },
-        });
-        if (data.isAcceptingFeedback) {
-          setValue("feedbacks", true);
-          setFeedbackStatus(true);
-        }
-      } catch (error) {
-        console.log("Error Fetching User status ", error);
-        toast.error("Unable to fetch Accept Feedbacks Status.");
+  async function getAcceptFeedbackStatus() {
+    try {
+      const { data } = await axios.get("api/accept-feedbacks", {
+        params: {
+          username: username,
+        },
+      });
+      if (data.isAcceptingFeedback) {
+        setValue("feedbacks", true);
+        setFeedbackStatus(true);
       }
+    } catch (error) {
+      console.log("Error Fetching User status ", error);
+      toast.error("Unable to fetch Accept Feedbacks Status.");
     }
+  }
+  useEffect(() => {
     getAcceptFeedbackStatus();
   }, []);
 
@@ -69,7 +69,7 @@ export function PublicLink({ username }: { username: string }) {
       <div className="flex items-center gap-4">
         {/* link box */}
         <div className="my-4 py-2 px-4 border-2 border-gray-300 border-dashed rounded-md bg-accent">
-          {`https://www.trueFeedback.com/u/${username}`}
+          {`http://localhost:3000/u/${username}`}
         </div>
         {/* copy button  */}
         <Button variant="default" onClick={copyLink}>

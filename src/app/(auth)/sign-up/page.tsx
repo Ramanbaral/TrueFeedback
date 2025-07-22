@@ -80,7 +80,7 @@ export default function SignUp() {
       setIsSubmitting(true);
       const response = await axios.post("/api/sign-up", data);
       if (response.data.success) {
-        toast.success("Account Created.");
+        toast.success("Account Created. Please verify your email address.");
         router.replace(`/verify-code/${username}`);
       } else {
         toast.error("Account Already Exists.");

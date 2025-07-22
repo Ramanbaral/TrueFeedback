@@ -2,8 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function Pagination({ curPage, totalPage }: { curPage: number; totalPage: number }) {
+  const router = useRouter();
   return (
     <ul className="mt-10 mb-5 flex justify-center gap-3 text-gray-900">
       <Button variant="ghost" disabled={curPage == 1}>
@@ -37,7 +39,13 @@ export function Pagination({ curPage, totalPage }: { curPage: number; totalPage:
         {curPage}/{totalPage}
       </li>
 
-      <Button variant="ghost" disabled={curPage == totalPage}>
+      <Button
+        variant="ghost"
+        disabled={curPage == totalPage}
+        onClick={() => {
+          router.refresh();
+        }}
+      >
         <li>
           <Link
             href={{

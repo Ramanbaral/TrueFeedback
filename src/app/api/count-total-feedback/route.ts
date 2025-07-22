@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-export const GET = async function (req: NextRequest) {
+export const GET = async function () {
   try {
     const session = await auth();
     if (!session) {
@@ -16,28 +16,17 @@ export const GET = async function (req: NextRequest) {
     }
 
     const userId = session?.user._id;
-
-    const { searchParams } = new URL(req.url);
-    const page = searchParams.get("page");
-    const pageNumber = parseInt(page as unknown as string) || 1;
-    const skipItem = (pageNumber - 1) * 9;
-
-    const messages = await prisma.message.findMany({
-      skip: skipItem,
-      take: 9,
+    const totalCount = await prisma.message.count({
       where: {
         userId: userId,
-      },
-      orderBy: {
-        createdAt: "desc",
       },
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: "succesfully fetched feedbacks.",
-        feedbacks: messages,
+        message: "succesfully fetched feedbacks count.",
+        totalCount,
       },
       { status: 200 }
     );

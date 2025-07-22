@@ -1,6 +1,8 @@
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+"use client";
+
+import { useSession } from "next-auth/react";
+import { redirect, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -8,32 +10,31 @@ import { RefreshCwIcon } from "lucide-react";
 import { PublicLink } from "./_components/PublicLink";
 import { Feedbacks } from "./_components/Feedbacks";
 import { FeedbackFallback } from "./_components/FeedbacksFallback";
+import { Skeleton } from "@/components/ui/skeleton";
 
-type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-async function Dashboard({ searchParams }: Props) {
-  const session = await auth();
-  const username = session?.user.username;
-  if (!session) redirect("/sign-in");
-
+//make Dashbaord a client comp and get user inf and useSearchParams to get page info
+function Dashboard() {
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") ?? 1;
   try {
-    const page = searchParams.page || 1;
+    const { data: session, status } = useSession();
+
+    const username = session?.user.username;
 
     return (
       <div>
-        <p className="text-center text-primary text-3xl font-semibold my-6">Welcome, @{username}</p>
-
-        <PublicLink username={username as string} />
+        {username && (
+          <p className="text-center text-primary text-3xl font-semibold my-6">
+            Welcome, @{username}
+          </p>
+        )}
+        {username === undefined ? (
+          <Skeleton className="m-5 w-2xl h-[150px]"></Skeleton>
+        ) : (
+          <PublicLink username={username as string} />
+        )}
 
         <Separator />
-
-        <div className="m-4">
-          <Button variant="secondary">
-            <RefreshCwIcon /> Refresh
-          </Button>
-        </div>
 
         {/* feedbacks boxes */}
         <Suspense fallback={<FeedbackFallback />}>
