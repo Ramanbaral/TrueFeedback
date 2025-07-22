@@ -6,13 +6,19 @@ import { RefreshCwIcon } from "lucide-react";
 import axios from "axios";
 import { Message } from "@/generated/prisma";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { FeedbackFallback } from "./FeedbacksFallback";
 import { toast } from "sonner";
 
-export function Feedbacks({ page }: { page: number }) {
+export function Feedbacks() {
   const [fetchingFeedbacks, setFetchingFeedbacks] = useState(true);
   const [feedbacks, setFeedbacks] = useState<Message[]>([]);
   const [totalFeedbackCount, setTotalFeedbackCount] = useState<number | null>(null);
+
+  const searchParams = useSearchParams();
+
+  const pageStr = searchParams.get("page") ?? "1";
+  const page = parseInt(pageStr);
 
   async function deleteFeedback(id: string) {
     try {

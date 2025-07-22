@@ -29,6 +29,7 @@ export async function getUserByUsernameOrEmail(usernameOrEmail: string) {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       id: "credentials",

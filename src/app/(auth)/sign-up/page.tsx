@@ -37,7 +37,7 @@ export default function SignUp() {
 
   type formData = z.infer<typeof signUpSchema>;
   const form = useForm<formData>({
-    resolver: zodResolver(signUpSchema as any),
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       username: "",
       email: "",

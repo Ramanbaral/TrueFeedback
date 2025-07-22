@@ -271,8 +271,8 @@ export default async function LandingPage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "TrueFeedback has revolutionized how our team communicates. The anonymity gives
-                  everyone a voice."
+                  &quot;TrueFeedback has revolutionized how our team communicates. The anonymity
+                  gives everyone a voice.&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-3">
@@ -294,8 +294,8 @@ export default async function LandingPage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "Finally, a platform where employees feel safe to share honest feedback. Game
-                  changer!"
+                  &quot;Finally, a platform where employees feel safe to share honest feedback. Game
+                  changer!&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-3">
@@ -317,8 +317,8 @@ export default async function LandingPage() {
                   ))}
                 </div>
                 <p className="text-gray-600 mb-4">
-                  "The insights we get from TrueFeedback help us make better decisions for our
-                  company culture."
+                  &quot;The insights we get from TrueFeedback help us make better decisions for our
+                  company culture.&quot;
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-3">
