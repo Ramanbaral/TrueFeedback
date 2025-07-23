@@ -1,7 +1,7 @@
 ## True Feedback
 
 **An anonymous feedback platform to help you grow through honest, unfiltered insights.**  
-Whether you're a creator, developer, leader, or team member, PureFeedback enables open and pressure-free communication.
+Whether you're a creator, developer, leader, or team member, TrueFeedback enables open and pressure-free communication.
 
 ---
 
